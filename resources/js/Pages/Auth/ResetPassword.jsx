@@ -1,90 +1,71 @@
-import { useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, useForm } from '@inertiajs/react';
+import {useEffect} from 'react';
+import {Head, router} from '@inertiajs/react';
+import AuthLayout from "@/Layouts/AuthLayout";
+import {Button, Form, Input} from "antd";
+import {LockOutlined, UserOutlined} from "@ant-design/icons";
 
-export default function ResetPassword({ token, email }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        token: token,
-        email: email,
-        password: '',
-        password_confirmation: '',
-    });
+/**
+ *
+ * @param token
+ * @param email
+ * @param errors
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function ResetPassword({token, email, errors}) {
+    const [form] = Form.useForm();
 
     useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
+        let fieldErrors = [];
+        Object.keys(errors).map((field) => {
+            let message = errors[field]
+            console.log(message)
+            fieldErrors.push({name: field, errors: [message]})
+        })
+        form.setFields(fieldErrors)
+        form.setFieldValue('password', null)
+    }, [errors])
 
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('password.store'));
-    };
+    const submit = (values) => {
+        router.post(route('password.store'), values)
+    }
 
     return (
-        <GuestLayout>
-            <Head title="Reset Password" />
+        <AuthLayout>
+            <Head title="Reset Password"/>
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
-                    <TextInput
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                    />
-
-                    <InputError message={errors.password_confirmation} className="mt-2" />
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ml-4" disabled={processing}>
-                        Reset Password
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+            <Form onFinish={submit} form={form}>
+                <Form.Item name={'token'} hidden={true} initialValue={token}>
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    initialValue={email}
+                    name={'email'}
+                    rules={[
+                        {required: true, message: 'This field is required'},
+                        {type: 'email', message: 'Please enter a valid email address'}
+                    ]}
+                >
+                    <Input placeholder={'abc@xyz.com'} prefix={<UserOutlined/>}/>
+                </Form.Item>
+                <Form.Item name={'password'}
+                           rules={[
+                               {required: true, message: 'This field is required', whitespace: true}
+                           ]}
+                >
+                    <Input.Password placeholder={'**********'} prefix={<LockOutlined/>}/>
+                </Form.Item>
+                <Form.Item name={'password_confirmation'}
+                           rules={[
+                               {required: true, message: 'This field is required', whitespace: true}
+                           ]}>
+                    <Input.Password placeholder={'**********'} prefix={<LockOutlined/>}/>
+                </Form.Item>
+                <Form.Item>
+                    <Button type={'primary'} size={'large'} htmlType={'submit'}>Reset Password</Button>
+                </Form.Item>
+            </Form>
+        </AuthLayout>
     );
-}
+    
+}// ResetPassword

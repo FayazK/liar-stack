@@ -1,117 +1,65 @@
-import { useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
+import AuthLayout from "@/Layouts/AuthLayout";
+import {Button, Form, Input} from "antd";
+import {MailOutlined, UnlockOutlined, UserOutlined} from "@ant-design/icons";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    });
+    const [form] = Form.useForm()
 
-    useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
-
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('register'));
-    };
+    /**
+     *
+     * @param values
+     */
+    const submit = (values) => {
+        router.post(route('register'), values)
+    }// submit
 
     return (
-        <GuestLayout>
-            <Head title="Register" />
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
+        <AuthLayout>
+            <Head title="Register"/>
+            <Form onFinish={submit} form={form}>
+                <Form.Item
+                    name={'name'}
+                    rules={[
+                        {required:true,message:'This field is required',whitespace:true}
+                    ]}
+                >
+                    <Input size={'large'} placeholder={'John Doe'} prefix={<UserOutlined />} />
+                </Form.Item>
+                <Form.Item
+                    name={'email'}
+                    rules={[
+                        {required: true, message: 'This field is required'},
+                        {type: 'email', message: 'Please enter a valid email address'}
+                    ]}
+                >
+                    <Input size={'large'} placeholder={'abc@xyz.com'} prefix={<MailOutlined />} />
+                </Form.Item>
+                <Form.Item
+                    name={'password'}
+                    rules={[
+                        {required: true, message: 'The password field is required.', whitespace: true}
+                    ]}
+                >
+                    <Input.Password size={'large'} placeholder={'*********'}
+                                    prefix={<UnlockOutlined/>}/>
+                </Form.Item>
+                <Form.Item
+                    name={'password_confirmation'}
+                    rules={[
+                        {required: true, message: 'The password field is required.', whitespace: true}
+                    ]}
+                >
+                    <Input.Password size={'large'} placeholder={'*********'}
+                                    prefix={<UnlockOutlined/>}/>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType={'submit'} type={'primary'} size={'large'} block={true}>Register</Button>
+                </Form.Item>
+                <div style={{textAlign: 'center'}}>
+                    Already registered? <Link href={route('login')}>Login now</Link>
                 </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password_confirmation} className="mt-2" />
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <Link
-                        href={route('login')}
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ml-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+            </Form>
+        </AuthLayout>
     );
 }

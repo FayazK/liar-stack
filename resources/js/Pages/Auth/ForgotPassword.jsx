@@ -33,7 +33,7 @@ export default function ForgotPassword({status,errors}) {
                 reset link that will allow you to choose a new one.
             </Paragraph>
 
-            {status && <Alert message={status} type="success" showIcon={true} closable={true}/>}
+            {status && <Alert style={{marginBottom:'1rem'}} message={status} type="success" showIcon={true} closable={true}/>}
 
             <Form onFinish={submit} form={forgetForm}>
                 <Form.Item name={'email'} rules={[
@@ -42,7 +42,7 @@ export default function ForgotPassword({status,errors}) {
                 ]}>
                     <Input placeholder={'abc@xyz.com'} size={'large'} prefix={<UserOutlined/>}/>
                 </Form.Item>
-                <Button type={'primary'} htmlType={'submit'}>Email Password Reset Link</Button>
+                <Button size={'large'} type={'primary'} htmlType={'submit'}>Email Password Reset Link</Button>
             </Form>
         </AuthLayout>
     );

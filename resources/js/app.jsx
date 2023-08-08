@@ -14,7 +14,15 @@ createInertiaApp({
     setup({el, App, props}) {
         const root = createRoot(el);
 
-        root.render(<ConfigProvider><App {...props} /></ConfigProvider>);
+        root.render(<ConfigProvider
+            theme={{
+                token:{
+                    fontFamily:'Work Sans, sans-serif'
+                }
+            }}
+        >
+            <App {...props} />
+        </ConfigProvider>);
     },
     progress: {
         color: '#4B5563',

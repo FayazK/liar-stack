@@ -1,6 +1,7 @@
 import '../../css/admin-layout.scss'
 import { useState } from 'react'
 import {
+  Avatar,
   Breadcrumb,
   Button,
   Layout,
@@ -54,7 +55,7 @@ export default function AdminLayout ({ children }) {
             icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
             onClick={() => setCollapsed(!collapsed)}
             style={{
-              fontSize: '16px', width: 64, height: 64,
+              fontSize: '16px', width: 64, height: 64,marginRight:'1rem'
             }}
           />
           <div className={'heading-wrapper'}>
@@ -79,6 +80,13 @@ export default function AdminLayout ({ children }) {
               ]}
             />
           </div>
+          <Space style={{marginRight:'1rem'}}>
+            <div className={'username-wrapper'}>
+              <Typography.Title level={4} className={'header-username'}>User Name</Typography.Title>
+              <Typography>Designation</Typography>
+            </div>
+            <Avatar size={56} icon={<UserOutlined />} />
+          </Space>
         </div>
       </Header>
       <Content

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import {
   Avatar,
   Breadcrumb,
-  Button,
+  Button, Dropdown,
   Layout,
   Menu,
   Space,
@@ -24,6 +24,14 @@ export default function AdminLayout ({ children }) {
 
   const [collapsed, setCollapsed] = useState(false)
   const { token: { colorBgContainer } } = theme.useToken()
+
+  const userMenu = [
+    {
+      label: 'Profile',
+      key: 'profile',
+      icon: <UserOutlined/>,
+    },
+  ]
 
   return <Layout className={'admin-layout'}>
     <Sider trigger={null}  collapsible collapsed={collapsed}>
@@ -80,19 +88,20 @@ export default function AdminLayout ({ children }) {
               ]}
             />
           </div>
-          <Space style={{marginRight:'1rem'}}>
-            <div className={'username-wrapper'}>
-              <Typography.Title level={4} className={'header-username'}>User Name</Typography.Title>
-              <Typography>Designation</Typography>
-            </div>
-            <Avatar size={56} icon={<UserOutlined />} />
-          </Space>
+          <Dropdown trigger={['click']} menu={{items:userMenu}}>
+            <Space style={{marginRight:'1rem'}}>
+              <div className={'username-wrapper'}>
+                <Typography.Title level={4} className={'header-username'}>User Name</Typography.Title>
+                <Typography>Designation</Typography>
+              </div>
+              <Avatar size={56} icon={<UserOutlined />} />
+            </Space>
+          </Dropdown>
         </div>
       </Header>
       <Content
         style={{
-          margin: '24px 16px',
-          padding: 24,
+          margin: '1rem',
           minHeight: 280,
           background: colorBgContainer,
         }}

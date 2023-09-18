@@ -37,22 +37,28 @@ export const DataTable = ({ columns, pageSize = 25, url, ...props }) => {
       let res = results.data
       setData(res.data)
       setLoading(false)
-      setPagination({
-        current: res.meta.current_page,
-        pageSize: res.meta.per_page, ...pagination,
-        total: res.meta.total,
-        showTotal: (total, range) => {
-          return `Showing ${range[0]} to ${range[1]} of ${total} items`
-        },        // total: data.totalCount,
+      setPagination(prevState => {
+        return {
+          ...prevState,
+          defaultCurrent: res.meta.current_page,
+          defaultPageSize: res.meta.per_page,
+          current: res.meta.current_page,
+          pageSize: res.meta.per_page,
+          total: res.meta.total,
+          showTotal: (total, range) => {
+            return `Showing ${range[0]} to ${range[1]} of ${total} items`
+          },        // total: data.totalCount,
+        }
       })
     })
-  }, [])// fetchData
+  }, [pagination, refresh])// fetchData
 
-  const handleTableChange = (pagination, filters, sorter) => {
-    setPagination(pagination)
+  const handleTableChange = (paging, filters, sorter) => {
+    paging.defaultCurrent = paging.current
+    setPagination(paging)
     setFilters(filters)
     setSorter(sorter)
-    fetchData()
+    setRefresh(Date.now())
   }// handleTableChange
 
   return <Table
@@ -60,5 +66,6 @@ export const DataTable = ({ columns, pageSize = 25, url, ...props }) => {
     dataSource={data}
     loading={loading}
     onChange={handleTableChange}
+    pagination={pagination}
     {...props}/>
 }

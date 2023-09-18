@@ -28,7 +28,7 @@ export default function () {
   return <AdminLayout>
     <ContentCard>
 
-      <DataTable size={'small'} columns={columns} url={'admin.users.list'} />
+      <DataTable rowKey={'id'} size={'small'} columns={columns} url={'admin.users.list'} />
     </ContentCard>
   </AdminLayout>
 }

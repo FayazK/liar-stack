@@ -21,6 +21,7 @@
     "dependencies": {
         "@ant-design/icons": "^5.1.4",
         "antd": "^5.5.0",
+        "recoil": "^0.7.7",
         "sass": "^1.64.2"
     }
 }

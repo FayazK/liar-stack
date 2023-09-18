@@ -11,12 +11,14 @@ import {
   Typography,
 } from 'antd'
 import {
+  GroupOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons'
+import { Link } from '@inertiajs/react'
 
 const { Sider, Content, Header } = Layout
 
@@ -34,12 +36,15 @@ export default function AdminLayout ({ children }) {
   ]
 
   return <Layout className={'admin-layout'}>
-    <Sider trigger={null}  collapsible collapsed={collapsed}>
+    <Sider theme={'light'} trigger={null} collapsible collapsed={collapsed}>
       <div className="logo"/>
       <Menu
-        theme="dark"
         mode="inline"
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={[
+          route().current(),
+          route().current('admin.users') ? 'user-management' : '',
+        ]}
+        defaultOpenKeys={[route().current('admin.users') ? 'user-management' : '']}
         items={[
           {
             key: '1', icon: <UserOutlined/>, label: 'nav 1',
@@ -47,6 +52,18 @@ export default function AdminLayout ({ children }) {
             key: '2', icon: <VideoCameraOutlined/>, label: 'nav 2',
           }, {
             key: '3', icon: <UploadOutlined/>, label: 'nav 3',
+          },
+          {
+            key: 'user-management',
+            icon: <UserOutlined/>,
+            label: 'User Management',
+            children: [
+              {
+                key: 'admin.users',
+                icon: <UserOutlined/>,
+                label: <Link href={route('admin.users')}>Users</Link>,
+              },
+            ],
           },
         ]}
       />
@@ -63,11 +80,12 @@ export default function AdminLayout ({ children }) {
             icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
             onClick={() => setCollapsed(!collapsed)}
             style={{
-              fontSize: '16px', width: 64, height: 64,marginRight:'1rem'
+              fontSize: '16px', width: 64, height: 64, marginRight: '1rem',
             }}
           />
           <div className={'heading-wrapper'}>
-            <Typography.Title level={4} className={'page-heading'}>Title here</Typography.Title>
+            <Typography.Title level={4} className={'page-heading'}>Title
+              here</Typography.Title>
             <Breadcrumb
               separator=">"
               items={[
@@ -88,13 +106,14 @@ export default function AdminLayout ({ children }) {
               ]}
             />
           </div>
-          <Dropdown trigger={['click']} menu={{items:userMenu}}>
-            <Space style={{marginRight:'1rem'}}>
+          <Dropdown trigger={['click']} menu={{ items: userMenu }}>
+            <Space style={{ marginRight: '1rem' }}>
               <div className={'username-wrapper'}>
-                <Typography.Title level={4} className={'header-username'}>User Name</Typography.Title>
+                <Typography.Title level={4} className={'header-username'}>User
+                  Name</Typography.Title>
                 <Typography>Designation</Typography>
               </div>
-              <Avatar size={56} icon={<UserOutlined />} />
+              <Avatar size={56} icon={<UserOutlined/>}/>
             </Space>
           </Dropdown>
         </div>
@@ -103,7 +122,6 @@ export default function AdminLayout ({ children }) {
         style={{
           margin: '1rem',
           minHeight: 280,
-          background: colorBgContainer,
         }}
       >
         {children}

@@ -20,6 +20,11 @@ const columns = [
     dataIndex: 'email',
   },
   {
+    title: 'Role',
+    key: 'role',
+    dataIndex: 'role',
+  },
+  {
     key: 'actions',
   },
 ]
@@ -27,7 +32,6 @@ const columns = [
 export default function () {
   return <AdminLayout>
     <ContentCard>
-
       <DataTable rowKey={'id'} size={'small'} columns={columns} url={'admin.users.list'} />
     </ContentCard>
   </AdminLayout>

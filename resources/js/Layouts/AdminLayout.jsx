@@ -42,9 +42,12 @@ export default function AdminLayout ({ children }) {
         mode="inline"
         defaultSelectedKeys={[
           route().current(),
-          route().current('admin.users') ? 'user-management' : '',
         ]}
-        defaultOpenKeys={[route().current('admin.users') ? 'user-management' : '']}
+        defaultOpenKeys={[
+          route().current('admin.users')||route().current('admin.roles')
+            ? 'user-management'
+            : '',
+        ]}
         items={[
           {
             key: '1', icon: <UserOutlined/>, label: 'nav 1',
@@ -58,6 +61,11 @@ export default function AdminLayout ({ children }) {
             icon: <UserOutlined/>,
             label: 'User Management',
             children: [
+              {
+                key: 'admin.roles',
+                icon: <UserOutlined/>,
+                label: <Link href={route('admin.roles')}>Roles</Link>,
+              },
               {
                 key: 'admin.users',
                 icon: <UserOutlined/>,
